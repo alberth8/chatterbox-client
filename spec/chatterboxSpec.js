@@ -106,6 +106,8 @@ describe('chatterbox', function() {
 
         app.init();
 
+        // debugger;
+
         $('#main').find('.username').trigger('click');
         expect(app.addFriend.called).to.be.true;
 
@@ -118,6 +120,8 @@ describe('chatterbox', function() {
         $('#message').val('Why so many Mel Brooks quotes?');
 
         app.init();
+
+        
 
         $('#send .submit').trigger('submit');
         expect(app.handleSubmit.calledOnce).to.be.true;
