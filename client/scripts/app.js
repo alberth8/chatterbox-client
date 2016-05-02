@@ -26,7 +26,9 @@ var app = {
       app.addFriend($(this).text());
     });
 
-    $('#send .submit').on('click', function() {
+    $('#send .submit').on('submit', function(event) {
+      event.preventDefault();
+      console.log('clicked');
       app.handleSubmit();
     });
 
@@ -77,7 +79,7 @@ var app = {
   addFriend: function(friend) {
   },
   handleSubmit: function() {
-    alert('hi');
+    console.log('in handle submit');
   }
 };
 
