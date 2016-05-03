@@ -25,25 +25,33 @@ var helpers = {
       }
       uniqueRooms[msgObj.roomname] = true;
     });
-    
+
+    helpers.appendFriends();
+    helpers.appendRooms(uniqueRooms); 
+  },
+  appendFriends: function() {
+    $('.username').on('click', function() {
+      console.log('in click handler');
+      var friendName = $(this).text();
+      console.log(friendName);
+      if (app.friends.indexOf(friendName) < 0) {
+        app.addFriend(friendName);
+      }
+      console.log(app.friends);
+    });
+  }, 
+  appendRooms: function(uniqueRooms) {
+    console.log(uniqueRooms);
     for (var key in uniqueRooms) {
       app.addRoom(key);
     }
     
     // set up click handler for changing rooms after appending rooms to dropdown
     $('.dropdown-menu li a').on('click', function() {
-      // hide all messages on the page
-      // show only those with a data attribute matching anchor text
-      // change app.roomname 
-      // console.log(this);
-      // console.log(this.innerHTML);
-
       // this refers to the html element clicked, namely <a></a>
       app.roomname = this.innerHTML;
       app.fetch(helpers.appendData);
     });
-    
-
   }
 };
 
@@ -51,6 +59,7 @@ var app = {
   server: 'https://api.parse.com/1/classes/messages',
   roomname: 'Lobby',
   username: '',
+  friends: [],
   init: function() { // click handlers go here 
 
     // remove click handlers (for test purposes)
@@ -58,10 +67,6 @@ var app = {
     //$('#send .submit').off();
 
     app.username = helpers.unescape(window.location.search, /\?username\=/);
-
-    $('.username').on('click', function() {
-      app.addFriend($(this).text());
-    });
 
     $('#send').on('submit', function(event) { // note to self: on submit works with form only
       event.preventDefault(); 
@@ -129,6 +134,7 @@ var app = {
     $('.dropdown-menu').append('<li><a href="#">' + helpers.vanillaEsc(name) + '</a></li>');
   },
   addFriend: function(friend) {
+    app.friends.push(friend);
   },
   handleSubmit: function() {
     // grab text input from textarea within form, send to server
@@ -143,26 +149,6 @@ var app = {
     app.send(forServer);
   }
 };
-
-
-    // var test = _.groupBy(msgArray, function(msgObj) { 
-    //   return msgObj.roomname; 
-    // });
-    // console.log(test);
-
-    // click handler to select room
-    // run through current messages, show/hide based on selected tags
-    // what happens upon next fetch?
-    // not a private implementation:  hidden messages still available in source
-
-    // alt approach:
-    // a flag to indicated current selected room
-    // on each call to fetch, 
-    // filter the collection returned by the selected room 
-    // only append those to the page
-
-
-
 
 
 
