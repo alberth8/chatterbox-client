@@ -50,25 +50,36 @@ var app = {
     });
 
     // updating messages from server
+    // grab our chats element from the DOM
     var stopNum = setInterval(function() {
       app.fetch(function(data) {
         console.log('inside fetch');
-        // grab our chats element from the DOM
         console.log(data);
         var textArray = data.results;
+        app.clearMessages();
         textArray.forEach(function(msgObj) {
-          $('#chats').append('<div class="userMsgs">' + helpers.vanillaEsc(msgObj.text) + '</div>');
+          $('#chats').append('<div class="userMsgs"><strong>' + 
+            helpers.vanillaEsc(msgObj.username) + "</strong>, " +
+            helpers.vanillaEsc(msgObj.text) + 
+            '</div>');
         });
                 // append each message retrieved by fetch to that div
-      }, 1000);
+      }, 10000000);
     });
     console.log('test');
 
-    setTimeout(function() {
-      clearInterval(stopNum);
-    }, 1);
+    // setTimeout(function() {
+    //   clearInterval(stopNum);
+    // }, 1);
 
   },
+
+
+  // setInterval(detectNewTweets, time);
+  // detectNewTweets, 
+
+
+
   server: 'https://api.parse.com/1/classes/messages',
   send: function(msg) {
     $.ajax({
@@ -89,7 +100,7 @@ var app = {
     $.ajax({      
       url: this.server, 
       type: 'GET',
-      data: JSON.stringify(), 
+      // data: JSON.stringify(), 
       contentType: 'application/json', 
       success: function (data) {
         cb(data);
