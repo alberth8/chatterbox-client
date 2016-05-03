@@ -1,26 +1,4 @@
-// var message = {
-//   username: 'shawndrost',
-//   text: 'trololo',
-//   roomname: '4chan'
-// };
-
-// $.ajax({
-//   // This is the url you should use to communicate with the parse API server.
-//   url: 'https://api.parse.com/1/classes/messages',
-//   type: 'POST',
-//   data: JSON.stringify(message),
-//   contentType: 'application/json',
-//   success: function (data) {
-//     console.log('chatterbox: Message sent');
-//   },
-//   error: function (data) {
-//     // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-//     console.error('chatterbox: Failed to send message', data);
-//   }
-// });
-
 $(window).load( function() {
-  // console.log('loaded');
   app.init();
 });
 
@@ -93,7 +71,7 @@ var app = {
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-        // console.error('chatterbox: Failed to fetch message', data);
+        console.error('chatterbox: Failed to fetch message', data);
       },
       complete: function() {
         setTimeout(function() {
@@ -115,10 +93,10 @@ var app = {
   addFriend: function(friend) {
   },
   handleSubmit: function() {
-    console.log('in handleSubmit');
-    // grab text input from textarea within form
-    // send to server
+    // console.log('in handleSubmit');
+    // grab text input from textarea within form, send to server
     var msgTxt = $('#message').val();
+    // clear out the form field
     $('#message').val('');
     var forServer = {
       username: helpers.unescape(window.location.search, /\?username\=/),

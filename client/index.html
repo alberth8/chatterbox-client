@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>chatterbox</title>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/styles.css">
 
     <!-- dependencies -->
@@ -15,13 +16,22 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      <div id="#roomSelect">Room:</div>
-    </div>
+      <div id="#roomSelect" class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+        Select Room:
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+<!--           <li><a href="#">HTML</a></li>
+          <li><a href="#">CSS</a></li>
+          <li><a href="#">JavaScript</a></li> -->
+        </ul></div>
+      </div>
     <!-- append chats below -->
     <div id="chats"></div> 
     <form id="send">
       <textarea id="message" placeholder="Your message here."></textarea>
       <button class="submit" type="submit">Submit</button> 
     </form>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   </body>
 </html>
