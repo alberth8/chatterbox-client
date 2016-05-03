@@ -8,6 +8,10 @@ var helpers = {
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
   },
+  unescape: function(str, pattern) { 
+    str = str.replace(pattern, '');
+    return decodeURI(str);
+  },
   appendData: function(data) {
     var msgArray = data.results; // array of message objects
     var uniqueRooms = {};
@@ -23,10 +27,18 @@ var helpers = {
     for (var key in uniqueRooms) {
       app.addRoom(key);
     }
-  },
-  unescape: function(str, pattern) { 
-    str = str.replace(pattern, '');
-    return decodeURI(str);
+    
+    // set up click handler after appending rooms to dropdown
+    $('.dropdown-menu li a').on('click', function() {
+      // hide all messages on the page
+      // show only those with a data attribute matching anchor text
+      console.log($('#chats span'));
+      $('#chats span').each(function() {
+        hide();
+      });
+    });
+    
+
   }
 };
 
@@ -42,8 +54,8 @@ var app = {
       app.addFriend($(this).text());
     });
 
-    $(document).on('submit', function(event) {
-      event.preventDefault(); // 
+    $('#send').on('submit', function(event) { // note to self: on submit works with form only
+      event.preventDefault(); 
       console.log('clicked');
       app.handleSubmit();
     });
@@ -93,8 +105,8 @@ var app = {
   clearMessages: function() {
     $('#chats').empty();
   },
-  addMessage: function(obj) {
-    $('#chats').append('<p><a href="#" class="username">' + helpers.vanillaEsc(obj.username) + '</a>: ' + helpers.vanillaEsc(obj.text) + '</p>'); 
+  addMessage: function(obj) {  
+    $('#chats').append('<span data-room="' + helpers.vanillaEsc(obj.roomname) + '"><a href="#" class="username">' + helpers.vanillaEsc(obj.username) + '</a>: ' + helpers.vanillaEsc(obj.text) + '</span><br/>'); 
   },
   addRoom: function(name) {
     $('.dropdown-menu').append('<li><a href="#">' + helpers.vanillaEsc(name) + '</a></li>');
@@ -102,7 +114,6 @@ var app = {
   addFriend: function(friend) {
   },
   handleSubmit: function() {
-    // console.log('in handleSubmit');
     // grab text input from textarea within form, send to server
     var msgTxt = $('#message').val();
     // clear out the form field
@@ -117,13 +128,21 @@ var app = {
 };
 
 
+    // var test = _.groupBy(msgArray, function(msgObj) { 
+    //   return msgObj.roomname; 
+    // });
+    // console.log(test);
 
+    // click handler to select room
+    // run through current messages, show/hide based on selected tags
+    // what happens upon next fetch?
+    // not a private implementation:  hidden messages still available in source
 
-
-
-
-
-
+    // alt approach:
+    // a flag to indicated current selected room
+    // on each call to fetch, 
+    // filter the collection returned by the selected room 
+    // only append those to the page
 
 
 
