@@ -19,23 +19,32 @@
 //   }
 // });
 
-// $(window).load( function() {
-//   console.log('loaded');
-//   app.init();
-// });
-
-
-
+$(window).load( function() {
+  // console.log('loaded');
+  app.init();
+});
 
 var helpers = {
   vanillaEsc: function(str) {
     var div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
+  },
+  appendData: function(data) {
+    var textArray = data.results;
+    app.clearMessages();
+    textArray.forEach(function(msgObj) {
+      app.addMessage(msgObj);
+    });
+  },
+  unescape: function(str, pattern) { 
+    str = str.replace(pattern, '');
+    return decodeURI(str);
   }
 };
 
 var app = {
+  server: 'https://api.parse.com/1/classes/messages',
   init: function() { // click handlers go here 
 
     // remove click handlers (for test purposes)
@@ -51,41 +60,10 @@ var app = {
       console.log('clicked');
       app.handleSubmit();
     });
-     
-    console.log('in init');
-    
 
-    app.fetch( function(data) {
-      var textArray = data.results;
-      app.clearMessages();
-      textArray.forEach(function(msgObj) {
-        app.addMessage(msgObj);
-      });
-    });
-  },
+    app.fetch(helpers.appendData);
+  },     
 
-
-
-    // updating messages from server
-    // grab our chats element from the DOM
-    // // var stopNum = 
-    // setInterval(function() {
-    //   // app.fetch(function(data) {
-    //   //   console.log('inside fetch');
-    //   //   console.log(data);
-    //   //   var textArray = data.results;
-    //   //   app.clearMessages();
-    //   console.log('CLEARED');
-    //   //   textArray.forEach(function(msgObj) {
-    //   //     app.addMessage(msgObj);
-    //   //   });
-    // }, 1000);
-    // // awaiting feedback on interval issue
-    // setTimeout(function() {
-    //   clearInterval(stopNum);
-    // }, 1);
-  
-  server: 'https://api.parse.com/1/classes/messages',
   send: function(msg) {
     $.ajax({
       url: this.server, 
@@ -102,6 +80,7 @@ var app = {
       }
     });
   },
+
   fetch: function(cb) {
     $.ajax({      
       url: this.server, 
@@ -118,17 +97,12 @@ var app = {
       },
       complete: function() {
         setTimeout(function() {
-          app.fetch( function(data) {
-            var textArray = data.results;
-            app.clearMessages();
-            textArray.forEach(function(msgObj) {
-              app.addMessage(msgObj);
-            });
-          });
-        }, 5000);
+          app.fetch(helpers.appendData);
+        }, 2000);
       }
     });
   },
+
   clearMessages: function() {
     $('#chats').empty();
   },
@@ -144,15 +118,16 @@ var app = {
     console.log('in handleSubmit');
     // grab text input from textarea within form
     // send to server
-    var msg = $('#message').val();
-    console.log(msg);
-    app.send(msg);
+    var msgTxt = $('#message').val();
+    $('#message').val('');
+    var forServer = {
+      username: helpers.unescape(window.location.search, /\?username\=/),
+      text: msgTxt,
+      roomname: ''
+    };
+    app.send(forServer);
   }
 };
-
-
-
-app.init();
 
 
 
