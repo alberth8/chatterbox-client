@@ -24,6 +24,14 @@ $(window).load( function() {
   app.init();
 });
 
+var helpers = {
+  vanillaEsc: function(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+};
+
 var app = {
   init: function() { // click handlers go here 
 
@@ -46,12 +54,19 @@ var app = {
       app.fetch(function(data) {
         console.log('inside fetch');
         // grab our chats element from the DOM
-        // append each message retrieved by fetch to that div
+        console.log(data);
+        var textArray = data.results;
+        textArray.forEach(function(msgObj) {
+          $('#chats').append('<div class="userMsgs">' + helpers.vanillaEsc(msgObj.text) + '</div>');
+        });
+                // append each message retrieved by fetch to that div
       }, 1000);
     });
     console.log('test');
 
-    clearInterval(stopNum);
+    setTimeout(function() {
+      clearInterval(stopNum);
+    }, 1);
 
   },
   server: 'https://api.parse.com/1/classes/messages',
