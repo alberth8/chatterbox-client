@@ -19,8 +19,17 @@
 //   }
 // });
 
+$(window).load( function() {
+  console.log('loaded');
+  app.init();
+});
+
 var app = {
   init: function() { // click handlers go here 
+
+    // remove click handlers (for test purposes)
+    $('.username').off();
+    $('#send .submit').off();
 
     $('.username').on('click', function() {
       app.addFriend($(this).text());
@@ -32,8 +41,19 @@ var app = {
       app.handleSubmit();
     });
 
+    // updating messages from server
+    var stopNum = setInterval(function() {
+      app.fetch(function(data) {
+        console.log('inside fetch');
+        // grab our chats element from the DOM
+        // append each message retrieved by fetch to that div
+      }, 1000);
+    });
+    console.log('test');
+
+    clearInterval(stopNum);
+
   },
-  // friends: [],
   server: 'https://api.parse.com/1/classes/messages',
   send: function(msg) {
     $.ajax({
@@ -50,18 +70,18 @@ var app = {
       }
     });
   },
-  fetch: function() {
+  fetch: function(cb) {
     $.ajax({      
       url: this.server, 
       type: 'GET',
-      // data: JSON.stringify(), 
+      data: JSON.stringify(), 
       contentType: 'application/json', 
       success: function (data) {
-        console.log('chatterbox: Message fetched');
+        cb(data);
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-        console.error('chatterbox: Failed to fetch message', data);
+        // console.error('chatterbox: Failed to fetch message', data);
       }
     });
 
