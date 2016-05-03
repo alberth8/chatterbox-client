@@ -24,13 +24,17 @@
         <ul class="dropdown-menu">
         </ul>
       </div>
+      <form id="send">
+        <textarea id="message" placeholder="Your message here."></textarea>
+        <button class="submit" type="submit">Submit</button> 
+      </form>
+      <form id="switchUser"> 
+        <input placeholder="New username here." id="newUserName"/>
+        <button class="submit" type="submit">Submit</button> 
+      </form>
     </div>
     <!-- append chats below -->
     <div id="chats"></div> 
-    <form id="send">
-      <textarea id="message" placeholder="Your message here."></textarea>
-      <button class="submit" type="submit">Submit</button> 
-    </form>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   </body>
 </html>

@@ -20,7 +20,9 @@ var helpers = {
     $('.dropdown-menu').empty();
 
     msgArray.forEach(function(msgObj) {
-      app.addMessage(msgObj);
+      if (msgObj.roomname === app.roomname) {
+        app.addMessage(msgObj);
+      }
       uniqueRooms[msgObj.roomname] = true;
     });
     
@@ -28,14 +30,17 @@ var helpers = {
       app.addRoom(key);
     }
     
-    // set up click handler after appending rooms to dropdown
+    // set up click handler for changing rooms after appending rooms to dropdown
     $('.dropdown-menu li a').on('click', function() {
       // hide all messages on the page
       // show only those with a data attribute matching anchor text
-      console.log($('#chats span'));
-      $('#chats span').each(function() {
-        hide();
-      });
+      // change app.roomname 
+      // console.log(this);
+      // console.log(this.innerHTML);
+
+      // this refers to the html element clicked, namely <a></a>
+      app.roomname = this.innerHTML;
+      app.fetch(helpers.appendData);
     });
     
 
@@ -44,11 +49,15 @@ var helpers = {
 
 var app = {
   server: 'https://api.parse.com/1/classes/messages',
+  roomname: 'Lobby',
+  username: '',
   init: function() { // click handlers go here 
 
     // remove click handlers (for test purposes)
     //$('.username').off();
     //$('#send .submit').off();
+
+    app.username = helpers.unescape(window.location.search, /\?username\=/);
 
     $('.username').on('click', function() {
       app.addFriend($(this).text());
@@ -58,6 +67,14 @@ var app = {
       event.preventDefault(); 
       console.log('clicked');
       app.handleSubmit();
+    });
+
+    $('#switchUser').on('submit', function(event) { // note to self: on submit works with form only
+      event.preventDefault(); 
+      var userName = $('#newUserName').val();
+      // clear out the form field
+      $('#newUserName').val('');
+      app.username = userName;
     });
 
     app.fetch(helpers.appendData);
@@ -119,9 +136,9 @@ var app = {
     // clear out the form field
     $('#message').val('');
     var forServer = {
-      username: helpers.unescape(window.location.search, /\?username\=/),
+      username: this.username,
       text: msgTxt,
-      roomname: ''
+      roomname: this.roomname
     };
     app.send(forServer);
   }
