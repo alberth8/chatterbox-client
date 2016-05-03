@@ -9,11 +9,20 @@ var helpers = {
     return div.innerHTML;
   },
   appendData: function(data) {
-    var textArray = data.results;
+    var msgArray = data.results; // array of message objects
+    var uniqueRooms = {};
+
     app.clearMessages();
-    textArray.forEach(function(msgObj) {
+    $('.dropdown-menu').empty();
+
+    msgArray.forEach(function(msgObj) {
       app.addMessage(msgObj);
+      uniqueRooms[msgObj.roomname] = true;
     });
+    
+    for (var key in uniqueRooms) {
+      app.addRoom(key);
+    }
   },
   unescape: function(str, pattern) { 
     str = str.replace(pattern, '');
@@ -88,7 +97,7 @@ var app = {
     $('#chats').append('<p><a href="#" class="username">' + helpers.vanillaEsc(obj.username) + '</a>: ' + helpers.vanillaEsc(obj.text) + '</p>'); 
   },
   addRoom: function(name) {
-    $('#roomSelect').append('<p>' + name + '</p>');
+    $('.dropdown-menu').append('<li><a href="#">' + helpers.vanillaEsc(name) + '</a></li>');
   },
   addFriend: function(friend) {
   },
