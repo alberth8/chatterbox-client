@@ -41,14 +41,25 @@ var helpers = {
       console.log(app.friends);
     });
   }, 
+  newRoom: function () {
+    var newRoom = prompt('What should we name the new room?') || 'New Room';
+    app.roomname = newRoom;
+    // app.fetch()
+  },
   appendRooms: function(uniqueRooms) {
+    // hard code "New Room"
+
+    $('.dropdown-menu').append('<li><a href="#" id="newRoom">NeW rOoM...</a></li>');
+    $('#newRoom').on('click', function() {
+      helpers.newRoom();
+    });
     console.log(uniqueRooms);
     for (var key in uniqueRooms) {
       app.addRoom(key);
-    }
-    
+    } 
+
     // set up click handler for changing rooms after appending rooms to dropdown
-    $('.dropdown-menu li a').on('click', function() {
+    $('#otherRooms').on('click', function() {
       // this refers to the html element clicked, namely <a></a>
       app.roomname = this.innerHTML;
       app.fetch(helpers.appendData);
@@ -137,7 +148,7 @@ var app = {
     }  
   },
   addRoom: function(name) {
-    $('.dropdown-menu').append('<li><a href="#">' + helpers.vanillaEsc(name) + '</a></li>');
+    $('.dropdown-menu').append('<li><a id="otherRooms" href="#">' + helpers.vanillaEsc(name) + '</a></li>');
   },
   addFriend: function(friend) {
     app.friends.push(friend);
