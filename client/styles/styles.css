@@ -88,3 +88,8 @@ form input[type=text] {
     background-color: #0090da;
 }
 
+#chats {
+    height: 500px;
+    overflow: scroll;
+}
+

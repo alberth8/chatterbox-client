@@ -36,6 +36,7 @@ var helpers = {
       console.log(friendName);
       if (app.friends.indexOf(friendName) < 0) {
         app.addFriend(friendName);
+        $(this).addClass('.friend');
       }
       console.log(app.friends);
     });
@@ -128,7 +129,12 @@ var app = {
     $('#chats').empty();
   },
   addMessage: function(obj) {  
-    $('#chats').append('<span data-room="' + helpers.vanillaEsc(obj.roomname) + '"><a href="#" class="username">' + helpers.vanillaEsc(obj.username) + '</a>: ' + helpers.vanillaEsc(obj.text) + '</span><br/>'); 
+    //if obj.username is in friendslist, then add a css class, and escape it 
+    if (_.contains(app.friends, obj.username)) {
+      $('#chats').append('<span class="friend" data-room="' + helpers.vanillaEsc(obj.roomname) + '"><a href="#" class="username">' + helpers.vanillaEsc(obj.username) + '</a>: ' + helpers.vanillaEsc(obj.text) + '</span><br/>'); 
+    } else {
+      $('#chats').append('<span data-room="' + helpers.vanillaEsc(obj.roomname) + '"><a href="#" class="username">' + helpers.vanillaEsc(obj.username) + '</a>: ' + helpers.vanillaEsc(obj.text) + '</span><br/>'); 
+    }  
   },
   addRoom: function(name) {
     $('.dropdown-menu').append('<li><a href="#">' + helpers.vanillaEsc(name) + '</a></li>');
